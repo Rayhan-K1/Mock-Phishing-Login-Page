@@ -1,0 +1,90 @@
+<html>
+
+<head>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <link rel="stylesheet" type="text/css" href="./source/index.css" />
+</head>
+
+<body>
+    <div id="application">
+        <template v-if="page != 'login'">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-primary" style="background: linear-gradient(135deg, #3ab2ee 10%, #008ed4 50%); position:fixed; width: 100%; z-index:100; top:0px;">
+                <router-link to="/" class="navbar-brand" style="cursor: pointer !important;" v-on:click="changePage(userCredentials.privilege == 1 ? 'User' : 'Admin')">OmniOnline</router-link>
+                <div class="collapse navbar-collapse">
+                    <ul class="navbar-nav mr-auto">
+                        <!-- Vue Routing to other page (Home page in this case) -->
+                        <router-link to="/">
+                            <li class="nav-item">
+                                <a class="nav-link" style="cursor: pointer !important;">Google Analytics</a>
+                            </li>
+                        </router-link>
+                    </ul>
+                    <!-- Holder for Logo - top right -->
+                    <div>
+                        <div class="dropdown">
+                            <img id="dropdownMenuButton" data-toggle="dropdown" src="./source/resources/user-icon2.png" class="float-right" style="width: 8%;cursor: pointer !important;" />
+                            <div class="dropdown-menu text-center" style="margin: 4.125rem 0 0;" :style="userCredentials.privilege == 1? 'left: 78%' : 'left:62%'">
+                                <h3>
+                                    <a class="dropdown-item disabled" href="#">{{userCredentials.username}}</a>
+                                    </h4>
+                                    <h5>
+                                        <a class="dropdown-item" href="#" v-on:click="changePage('MyAccount');">My Account</a>
+                                    </h5>
+                                    <h5>
+                                        <a class="dropdown-item text-danger" href="#" v-on:click="logout();">Log Out</a>
+                                    </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </template>
+        <!-- Not Signed In Page -->
+        <template v-if="page == 'login'">
+            <div class="wrapper fadeInDown">
+                <div id="formContent">
+                    <div class="fadeIn first py-3">
+                        <img src="./source/resources/61457.png" width="50px;" style="opacity: 0.5" />
+                    </div>
+                    <form>
+                        <input type="text" id="loginInputs" class="fadeIn second" name="login" placeholder="Enter Email" v-model="email">
+                        <input type="text" id="loginInputs" class="fadeIn third" name="login" placeholder="Enter Password" v-model="password">
+                        <input type="button" id="loginButton" class="fadeIn fourth mt-3 mb-3" style="cursor: pointer !important;" value="Log In" v-on:click="logIn('jsLogin')">
+                    </form>
+                    <div class="alert alert-danger" v-if="errorMessage">
+                        {{errorMessage}}
+                    </div>
+
+                </div>
+            </div>
+        </template>
+        <!-- User Signed In Page -->
+        <template v-else-if="page == 'User'">
+            <div class="page-content">
+                <div class="jumbotron container-fluid text-center display-4 font-weight-bold opacity">Welcome, {{userCredentials.username}}</div>
+            </div>
+        </template>
+        <!-- Admin Signed In Page -->
+        <template v-else-if="page == 'Admin'">
+            <div class="page-content">
+                <div class="jumbotron container-fluid text-center display-4 font-weight-bold opacity">Welcome, {{userCredentials.username}}</div>
+            </div>
+        </template>
+        <!-- My Account Page -->
+        <template v-else-if="page == 'MyAccount'">
+            <div class="page-content">
+                <div class="jumbotron container-fluid text-center display-4 font-weight-bold opacity">
+                    My Account
+                    <h1>{{userCredentials.username}}</h2>
+                        <h1>Authorisation Level: {{_checkAuthorisationLevel}}</h2>
+                </div>
+            </div>
+        </template>
+    </div>
+    <script src="./source/index.js"></script>
+</body>
+
+</html>
